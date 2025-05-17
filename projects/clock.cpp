@@ -6,10 +6,21 @@
 using namespace std;
 
 int runClock(int h, int m, int s) {
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
     while (true) {
         system("cls");
-        cout << setw(2) << setfill('0') << h << ":" << setw(2) << setfill('0') << m << ":" << setw(2) << setfill('0') << s << endl;
-        cout << "\nPress 'q' to re-enter time, ESC to exit program" << endl;
+        cout << string(20, ' ') << "|  ";
+        SetConsoleTextAttribute(hConsole, FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+
+        cout    << setw(2) << setfill('0') << h << ":"
+                << setw(2) << setfill('0') << m << ":"
+                << setw(2) << setfill('0') << s;
+        
+                SetConsoleTextAttribute(hConsole, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+        cout << "  | " << endl;
+        cout << endl;
+
+        cout << string(20, ' ') << "\nPress 'q' to re-enter time, ESC to exit program" << endl;
         Sleep(1000);
         s++;
         if (s > 59) {
@@ -26,9 +37,11 @@ int runClock(int h, int m, int s) {
         if (_kbhit()) {
             char ch = _getch();
             if (ch == 'q' || ch == 'Q') {
+                SetConsoleTextAttribute(hConsole, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
                 return 1;
             }
             if (ch == 27) {
+                SetConsoleTextAttribute(hConsole, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
                 return 2;
             }
         }
@@ -37,6 +50,8 @@ int runClock(int h, int m, int s) {
 
 int main() {
     int h, m, s;
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    SetConsoleTextAttribute(hConsole, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
     while (true) {
         cout << "Let's set the current time!" << endl;
         cout << "Enter hour: " << endl;
