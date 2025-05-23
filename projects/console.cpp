@@ -24,6 +24,7 @@ class Console {
 private:
     std::map<std::string, CommandHandler> commands;
     bool running;
+    std::vector<std::string> history;
 
 public:
     Console() : running(true) {
@@ -32,6 +33,12 @@ public:
             std::cout << "Available commands:\n";
             for (const auto& cmd : commands) {
                 std::cout << "  " << cmd.first << "\n";
+            }
+        };
+        commands["history"] = [this](const std::vector<std::string>& args) {
+            std::cout << "Command history:\n";
+            for (size_t i = 0; i < history.size(); ++i) {
+                std::cout << i + 1 << ": " << history[i] << "\n";
             }
         };
         commands["exit"] = [this](const std::vector<std::string>& args) {
@@ -61,7 +68,7 @@ public:
     // Process a single input line
     void processInput(const std::string& input) {
         if (input.empty()) return;
-
+        history.push_back(input);
         auto tokens = split(input);
         if (tokens.empty()) return;
 
